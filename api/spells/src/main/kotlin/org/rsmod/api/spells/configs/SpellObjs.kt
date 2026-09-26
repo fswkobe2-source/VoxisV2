@@ -16,7 +16,7 @@ internal object SpellObjEditor : ObjEditor() {
 
     private fun editStandardSpells() {
         spell(objs.view_jewellery_enchantment_spells, 0.0)
-        spell(objs.spell_hometeleport_lumbridge, 0.0)
+        tele(objs.spell_hometeleport_lumbridge, 0.0, CoordGrid(3094, 3491, 0))
         spell(objs.spell_wind_strike, 5.5)
         spell(objs.spell_confuse, 13.0)
         spell(objs.view_bolt_enchantment_spells, 0.0)

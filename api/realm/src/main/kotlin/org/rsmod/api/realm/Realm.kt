@@ -61,4 +61,9 @@ public data class RealmConfig(
     val requireRegistration: Boolean,
     val ignorePasswords: Boolean,
     val autoAssignDisplayNames: Boolean,
+    /**
+     * When `true`, the realm is a members world. Logins are sent to the client as members even if
+     * the account row is still free-to-play, which is what lets members items and areas work.
+     */
+    val members: Boolean = false,
 )

@@ -12,12 +12,14 @@ import org.rsmod.api.player.deathResetTimers
 import org.rsmod.api.player.disablePrayers
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.vars.intVarp
+import org.rsmod.api.realm.Realm
 import org.rsmod.game.entity.Player
 import org.rsmod.game.type.stat.StatTypeList
-import org.rsmod.map.CoordGrid
 
 @Singleton
-public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList) {
+public class PlayerDeath
+@Inject
+constructor(private val statTypes: StatTypeList, private val realm: Realm) {
     private var Player.specialAttackType by intVarp(varps.sa_attack)
 
     public suspend fun death(access: ProtectedAccess) {
@@ -25,7 +27,7 @@ public class PlayerDeath @Inject constructor(private val statTypes: StatTypeList
     }
 
     private suspend fun ProtectedAccess.deathSequence() {
-        val respawn = CoordGrid(0, 50, 50, 21, 18)
+        val respawn = realm.config.respawnCoord
         val randomRespawn = mapFindSquareLineOfWalk(respawn, minRadius = 0, maxRadius = 2)
         stopAction()
         delay(2)

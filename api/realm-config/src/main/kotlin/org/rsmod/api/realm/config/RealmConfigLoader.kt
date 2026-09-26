@@ -22,7 +22,7 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
                 """
                     SELECT id, login_message, login_broadcast, spawn_coord, respawn_coord,
                         dev_mode, require_registration, ignore_passwords, auto_assign_display_names,
-                        player_xp_rate_in_hundreds, global_xp_rate_in_hundreds
+                        members, player_xp_rate_in_hundreds, global_xp_rate_in_hundreds
                         FROM realms WHERE name = ?
                 """
                     .trimIndent()
@@ -43,6 +43,7 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
                     val requireRegistration = resultSet.getBoolean("require_registration")
                     val ignorePasswords = resultSet.getBoolean("ignore_passwords")
                     val autoAssignDisplayNames = resultSet.getBoolean("auto_assign_display_names")
+                    val members = resultSet.getBoolean("members")
                     return RealmConfig(
                         id = id,
                         loginMessage = loginMessage,
@@ -55,6 +56,7 @@ constructor(private val database: Database, @Json private val objectMapper: Obje
                         requireRegistration = requireRegistration,
                         ignorePasswords = ignorePasswords,
                         autoAssignDisplayNames = autoAssignDisplayNames,
+                        members = members,
                     )
                 }
             }

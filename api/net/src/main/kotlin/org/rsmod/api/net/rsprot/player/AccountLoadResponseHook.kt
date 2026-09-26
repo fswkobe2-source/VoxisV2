@@ -186,6 +186,14 @@ class AccountLoadResponseHook(
             resizable = loginBlock.resizable,
         )
         player.newAccount = fromResponse.isNewAccount()
+        // A members realm overrides the account flag. The client refuses members objects unless
+        // this login bit is set, and refuses the world entirely if the world list says members
+        // but this bit is clear.
+        player.members = player.members || config.members
+        logger.info {
+            "Login membership for '${player.username}': members=${player.members} " +
+                "(realm members world=${config.members})"
+        }
         return player
     }
 

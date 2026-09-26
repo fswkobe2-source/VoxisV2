@@ -1,5 +1,6 @@
 package org.rsmod.api.player.worn
 
+import com.github.michaelbull.logging.InlineLogger
 import jakarta.inject.Inject
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.invtx.invTransaction
@@ -23,6 +24,7 @@ import org.rsmod.objtx.isErr
 public class HeldEquipOp
 @Inject
 constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
+    private val logger = InlineLogger()
     public fun equip(player: Player, invSlot: Int, inventory: Inventory): HeldEquipResult {
         val obj = inventory[invSlot] ?: return HeldEquipResult.Fail.InvalidObj
         val objType = objTypes[obj]
@@ -101,6 +103,12 @@ constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
             eventBus.publish(equip)
 
             player.rebuildAppearance()
+            if (objType.members) {
+                logger.info {
+                    "Equipped members item '${objType.name}' (${objType.id}) for " +
+                        "${player.username}; members=${player.members}"
+                }
+            }
         }
 
         return result

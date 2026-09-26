@@ -29,6 +29,8 @@ object BaseVarps : VarpReferences() {
     val soulreaper_souls = find("soulreaper_stacks", 858899946)
 
     val option_run = find("option_run", 39271563)
+    /** Minutes since the unix epoch when a home teleport last completed. Cooldown is 30 minutes. */
+    val aide_tele_timer = find("aide_tele_timer")
     val option_attackpriority = find("option_attackpriority", 251271828)
     val option_attackpriority_npc = find("option_attackpriority_npc", 296441051)
 
