@@ -8,8 +8,8 @@ import org.rsmod.api.config.refs.synths
 import org.rsmod.api.config.refs.varps
 import org.rsmod.api.player.protect.ProtectedAccess
 import org.rsmod.api.player.protect.ProtectedAccessLauncher
-import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.player.ui.IfOverlayButton
+import org.rsmod.api.player.vars.intVarp
 import org.rsmod.api.script.onIfOverlayButton
 import org.rsmod.api.script.onPlayerLogout
 import org.rsmod.api.script.onPlayerQueueWithArgs
@@ -62,9 +62,7 @@ constructor(
             val minutes = (readyAt - now).coerceAtLeast(1)
             val unit = if (minutes == 1) "minute" else "minutes"
             mes("You need to wait another $minutes $unit to cast this spell.")
-            logger.info {
-                "Home teleport blocked for ${player.username}: $minutes $unit remaining"
-            }
+            logger.info { "Home teleport blocked for ${player.username}: $minutes $unit remaining" }
             return
         }
         if (player.slotId in casts) {
@@ -155,11 +153,21 @@ constructor(
 
         private val STAGES =
             listOf(
-                Stage(home_seqs.drawing_chalk, home_spots.chalk, synths.aide_teleport_chalk, ticks = 5),
+                Stage(
+                    home_seqs.drawing_chalk,
+                    home_spots.chalk,
+                    synths.aide_teleport_chalk,
+                    ticks = 5,
+                ),
                 Stage(home_seqs.sit_down, null, synths.aide_teleport_sitdown, ticks = 4),
                 Stage(home_seqs.get_book, home_spots.book, synths.aide_teleport_book, ticks = 5),
                 Stage(home_seqs.recite, home_spots.portal, null, ticks = 6),
-                Stage(home_seqs.teleport, home_spots.teleport, synths.aide_teleport_portal, ticks = 4),
+                Stage(
+                    home_seqs.teleport,
+                    home_spots.teleport,
+                    synths.aide_teleport_portal,
+                    ticks = 4,
+                ),
             )
     }
 }
