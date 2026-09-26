@@ -100,17 +100,19 @@ class GameServerCachePacker : CliktCommand(name = "cache-pack") {
 
         val verifier = injector.getInstance(TypeVerifier::class.java)
         val verification = verifier.verifyAll(verifyIdentityHashes = false)
-        if (verification.isCacheUpdateRequired()) {
-            if (packedCache) {
-                throw RuntimeException(verification.formatError())
-            }
+        if (verification.isCacheUpdateRequired() && packedCache) {
+            throw RuntimeException(verification.formatError())
+        } else if (verification.isFailure()) {
+            throw RuntimeException(verification.formatError())
+        }
+        // Resource builders (maps, models, clientscripts) are not covered by type verification,
+        // so the first pass always packs them, even when no config types changed.
+        if (!packedCache) {
             updateCaches(injector)
             closeCaches(injector)
             packedCache = true
             packEnrichedTypes()
             return false
-        } else if (verification.isFailure()) {
-            throw RuntimeException(verification.formatError())
         }
         return true
     }
