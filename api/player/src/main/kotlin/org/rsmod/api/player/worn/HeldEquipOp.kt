@@ -25,6 +25,7 @@ public class HeldEquipOp
 @Inject
 constructor(private val objTypes: ObjTypeList, private val eventBus: EventBus) {
     private val logger = InlineLogger()
+
     public fun equip(player: Player, invSlot: Int, inventory: Inventory): HeldEquipResult {
         val obj = inventory[invSlot] ?: return HeldEquipResult.Fail.InvalidObj
         val objType = objTypes[obj]

@@ -1,5 +1,6 @@
 package org.rsmod.api.spells.configs
 
+import org.rsmod.api.config.constants
 import org.rsmod.api.config.refs.objs
 import org.rsmod.api.config.refs.params
 import org.rsmod.api.type.editors.obj.ObjEditor
@@ -16,7 +17,7 @@ internal object SpellObjEditor : ObjEditor() {
 
     private fun editStandardSpells() {
         spell(objs.view_jewellery_enchantment_spells, 0.0)
-        tele(objs.spell_hometeleport_lumbridge, 0.0, CoordGrid(3094, 3491, 0))
+        tele(objs.spell_hometeleport_lumbridge, 0.0, constants.home_coord)
         spell(objs.spell_wind_strike, 5.5)
         spell(objs.spell_confuse, 13.0)
         spell(objs.view_bolt_enchantment_spells, 0.0)

@@ -5,6 +5,7 @@ import jakarta.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 import org.rsmod.annotations.InternalApi
+import org.rsmod.api.config.refs.interfaces
 import org.rsmod.api.invtx.invAdd
 import org.rsmod.api.invtx.invClear
 import org.rsmod.api.player.output.MiscOutput
@@ -85,6 +86,12 @@ constructor(
         onCommand("telezone", "Teleport to zone key", ::teleZone) {
             invalidArgs = "Use as ::telezone zoneX zoneY level (ex: 400 400 0)"
         }
+        onCommand("home", "Teleport to Edgeville spawn", ::home)
+        onCommand("teleto", "Teleport to named location", ::teleTo) {
+            invalidArgs = "Use as ::teleto name (ex: ${TeleportLocations.byName.keys.first()})"
+        }
+        onCommand("openbank", "Open bank", ::openBank)
+        onCommand("ob", "Open bank (alias of ::openbank)", ::openBank)
         onCommand("anim", "Play animation", ::anim)
         onCommand("spot", "Play spotanim", ::spotanim) {
             invalidArgs = "Use as ::spot spotanimDebugNameOrId (ex: fx_emote_party01_active)"
@@ -97,6 +104,7 @@ constructor(
             invalidArgs = "Use as ::npcadd duration npcDebugNameOrId (ex: 100 prison_pete)"
         }
         onCommand("invadd", "Spawn obj into inv", ::invAdd)
+        onCommand("item", "Spawn obj into inv (alias of ::invadd)", ::invAdd)
         onCommand("invclear", "Remove all objs from inv", ::invClear)
         onCommand("varp", "Set varp value", ::setVarp) {
             invalidArgs = "Use as ::varp debugNameOrId value (ex: option_run 1)"
@@ -147,6 +155,36 @@ constructor(
             protectedAccess.launch(player) {
                 player.mes("Teleported to $coords.")
                 telejump(coords)
+            }
+        }
+
+    private fun home(cheat: Cheat) =
+        with(cheat) {
+            protectedAccess.launch(player) {
+                player.mes("Teleported home.")
+                telejump(TeleportLocations.HOME)
+            }
+        }
+
+    private fun teleTo(cheat: Cheat): Unit =
+        with(cheat) {
+            val name = args[0].lowercase()
+            val coords = TeleportLocations.byName[name]
+            if (coords == null) {
+                val available = TeleportLocations.byName.keys.joinToString(", ")
+                player.mes("Unknown location: '$name'. Available: $available")
+                return
+            }
+            protectedAccess.launch(player) {
+                player.mes("Teleported to $name.")
+                telejump(coords)
+            }
+        }
+
+    private fun openBank(cheat: Cheat) =
+        with(cheat) {
+            protectedAccess.launch(player) {
+                ifOpenMainSidePair(main = interfaces.bank_main, side = interfaces.bank_side)
             }
         }
 
