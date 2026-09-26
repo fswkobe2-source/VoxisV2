@@ -1,10 +1,11 @@
 package org.rsmod.content.other.commands
 
+import org.rsmod.api.config.constants
 import org.rsmod.map.CoordGrid
 
 /** Named destinations used by `::home` and `::teleto <name>`. */
 internal object TeleportLocations {
-    val HOME: CoordGrid = CoordGrid(x = 3094, z = 3491, level = 0)
+    val HOME: CoordGrid = constants.home_coord
 
     val byName: Map<String, CoordGrid> =
         mapOf(

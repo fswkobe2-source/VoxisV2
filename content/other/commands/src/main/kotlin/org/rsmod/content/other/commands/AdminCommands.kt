@@ -90,7 +90,8 @@ constructor(
         onCommand("teleto", "Teleport to named location", ::teleTo) {
             invalidArgs = "Use as ::teleto name (ex: ${TeleportLocations.byName.keys.first()})"
         }
-        onCommand("bank", "Open bank", ::bank)
+        onCommand("openbank", "Open bank", ::openBank)
+        onCommand("ob", "Open bank (alias of ::openbank)", ::openBank)
         onCommand("anim", "Play animation", ::anim)
         onCommand("spot", "Play spotanim", ::spotanim) {
             invalidArgs = "Use as ::spot spotanimDebugNameOrId (ex: fx_emote_party01_active)"
@@ -180,7 +181,7 @@ constructor(
             }
         }
 
-    private fun bank(cheat: Cheat) =
+    private fun openBank(cheat: Cheat) =
         with(cheat) {
             protectedAccess.launch(player) {
                 ifOpenMainSidePair(main = interfaces.bank_main, side = interfaces.bank_side)

@@ -2,6 +2,8 @@
 
 package org.rsmod.api.config
 
+import org.rsmod.map.CoordGrid
+
 typealias constants = Constants
 
 object Constants {
@@ -17,6 +19,10 @@ object Constants {
     const val cm_options: String = "Select an option"
     const val cm_count: String = "Enter amount:"
     const val cm_obj: String = "Select an item:"
+
+    // Edgeville home spot: standard-spellbook home teleport, `::home`, `::teleto edgeville`, and
+    // the dev realm spawn/respawn (see db migration V9, which must match this value).
+    val home_coord: CoordGrid = CoordGrid(x = 3087, z = 3496, level = 0)
 
     const val lootdrop_duration: Int = 200
     const val shop_default_size: Int = 40
