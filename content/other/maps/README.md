@@ -24,7 +24,34 @@ found`, so either ship both files or remove the matching `resourceFile(...)` lin
   in `m48_54` / `l48_54`.
 * Loc IDs must exist in the rev 233 cache (or be added through a `LocBuilder` in this repo).
 
-## Exporting a square from RSPSi
+## Day-to-day workflow (Windows): `import-map.bat`
+
+`import-map.bat` in the repo root (`C:\Users\andre\Desktop\RSMod\import-map.bat`) automates
+the export -> pack -> clear-client-cache loop:
+
+1. In RSPSi, export each edited square to `C:\Users\andre\Desktop\map-exports` as
+   `m[x]_[z].dat` and `l[x]_[z].dat` (e.g. `m48_54.dat`, `l48_54.dat`). Keep this folder: it is
+   the master copy of your design.
+2. Double-click `import-map.bat`. It:
+   * copies every `m*_*.dat` / `l*_*.dat` from `map-exports` into
+     `content\other\maps\src\main\resources\map\` with the `.dat` stripped (overwriting);
+   * warns if an exported square has no builder registering it (e.g. you exported `48_55` but only
+     `48_54` is in `EdgevilleTiles`/`EdgevilleLocs`) and offers to generate
+     `Square[x]_[z]Tiles.kt` / `Square[x]_[z]Locs.kt` for it;
+   * runs `gradlew install` (repacks `.data\cache\game` and `.data\cache\js5`);
+   * deletes the client's cache at `C:\Users\andre\.rsmod-client\cache` so the client
+     re-downloads the changed squares;
+   * prints `Done. Start the server and client.` and pauses.
+   If `gradlew install` fails, the client cache is left alone and the script stops.
+3. Start the server (`gradlew run`) and the client.
+
+**Reopening your design in RSPSi:** always load it with **File > Open from > .dat/.gz** and pick
+the files in `map-exports`. Do **not** open the square from a cache (`.data\cache\game`,
+`js5` or `vanilla`): `gradlew install` rebuilds `game`/`js5` from vanilla every run, so a
+cache-loaded square is either vanilla or whatever was packed last time - opening it and exporting
+again would overwrite your `map-exports` files and lose your changes.
+
+## Exporting a square from RSPSi (manual steps)
 
 1. Point RSPSi at an OSRS cache of the same revision. The simplest source is this repo's vanilla
    cache in `.data/cache/vanilla` (created by `gradlew install`) together with
@@ -41,6 +68,8 @@ found`, so either ship both files or remove the matching `resourceFile(...)` lin
    square through js5 on next login; delete the client's local cache if it shows stale terrain.
 
 ## Adding another square
+
+`import-map.bat` can generate the builder classes for you (see above). Manually:
 
 1. Export `m[x]_[z]` / `l[x]_[z]` as above into `src/main/resources/map/`.
 2. Add `resourceFile<EdgevilleTiles>("/map/m[x]_[z]")` to `EdgevilleTiles.onPackMapTask()` and
